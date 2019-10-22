@@ -1,24 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+
+const todos = [
+  {description:'Learn HTML', due: '', isComplete: false},
+  {description:'Learn CSS', due: '', isComplete: false},
+  {description:'Learn JavaScript', due: '', isComplete: true},
+];
+
+function TodoList({isComplete}) {
+  return (
+    <>
+      <h2>{isComplete ? 'Done' : 'To-do'}</h2>
+      <ul>
+        {todos
+          .filter(todo => todo.isComplete === isComplete)
+          .map(
+            todo => 
+              <li>{todo.description} 
+                <button>Edit</button>
+              </li>
+          )
+        }
+      </ul>
+    </>
+  )
+}
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Wunderlist 2.0</h1>
+      <TodoList isComplete={false} />
+      <TodoList isComplete={true} />
     </div>
   );
 }
