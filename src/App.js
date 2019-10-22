@@ -1,36 +1,50 @@
 import React from 'react';
 
-const todos = [
-  {description:'Learn HTML', due: '', isComplete: false},
-  {description:'Learn CSS', due: '', isComplete: false},
-  {description:'Learn JavaScript', due: '', isComplete: true},
+const initialTodos = [
+  {id: 1, description:'Learn HTML', due: '', isComplete: false, isSelected: false},
+  {id: 2, description:'Learn CSS', due: '', isComplete: false, isSelected: false},
+  {id: 3, description:'Learn JavaScript', due: '', isComplete: true, isSelected: false},
 ];
 
-function TodoList({isComplete}) {
+function TaskList({isComplete, todos, setTodos}) {
+  const toggleSelected = id => e => {
+    setTodos(todos.map(todo => todo.id === id 
+      ? {...todo, isSelected: !todo.isSelected} 
+      : todo))
+  }
+
+  const toggleComplete = () => {
+    setTodos(todos.map(todo => todo.isSelected 
+      ? {...todo, isComplete: !todo.isComplete, isSelected: false} 
+      : todo))
+  }
+
   return (
     <>
       <h2>{isComplete ? 'Done' : 'To-do'}</h2>
-      <ul>
         {todos
           .filter(todo => todo.isComplete === isComplete)
           .map(
             todo => 
-              <li>{todo.description} 
+              <div key={todo.id} >
+                <input type='checkbox' checked={todo.isSelected} onChange={toggleSelected(todo.id)} />
+                <span>{todo.description}</span> 
                 <button>Edit</button>
-              </li>
+              </div>
           )
         }
-      </ul>
+      <button onClick={toggleComplete}>Mark {isComplete ? 'Inc' : 'C'}omplete</button>
     </>
   )
 }
 
 function App() {
+  const [todos, setTodos] = React.useState(initialTodos);
   return (
     <div className="App">
       <h1>Wunderlist 2.0</h1>
-      <TodoList isComplete={false} />
-      <TodoList isComplete={true} />
+      <TaskList isComplete={false} todos={todos} setTodos={setTodos} />
+      <TaskList isComplete={true}  todos={todos} setTodos={setTodos} />
     </div>
   );
 }
